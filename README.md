@@ -1,3 +1,4 @@
+<img width="1276" height="432" alt="Screenshot_77" src="https://github.com/user-attachments/assets/ca08c0c0-ce32-4130-83c2-6b7993e7fa90" />
 # Desafio DIO: Criando um Ataque Brute Force de Senhas com Medusa e Kali Linux
 
 Repositório desenvolvido como entrega de desafio prático durante os meus estudos de Cibersegurança com bolsa da **DIO (Digital Innovation One)**. O objetivo é documentar o processo técnico de auditoria de senhas e testes de força bruta em ambiente controlado utilizando **Kali Linux**, **Nmap** e **Medusa**.
