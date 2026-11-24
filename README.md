@@ -1,62 +1,64 @@
-# kali-brute-force-medusa
+# Desafio DIO: Criando um Ataque Brute Force de Senhas com Medusa e Kali Linux
 
+Repositório desenvolvido como entrega de desafio prático durante os meus estudos de Cibersegurança com bolsa da **DIO (Digital Innovation One)**. O objetivo é documentar o processo técnico de auditoria de senhas e testes de força bruta em ambiente controlado utilizando **Kali Linux**, **Nmap** e **Medusa**[cite: 1, 2].
 
-# Estudo: Ataque de Força Bruta com Medusa no Kali Linux
+> **Aviso Legal:** Todo o conteúdo deste repositório tem fins exclusivamente educacionais e de aprendizado em segurança da informação. Todos os testes foram realizados em ambiente isolado de laboratório (máquinas virtuais locais e aplicações propositalmente vulneráveis, como o DVWA)[cite: 1, 2].
 
-Repositório dedicado às anotações, comandos e exemplos práticos desenvolvidos durante os meus estudos de Cibersegurança com bolsa da **DIO (Digital Innovation One)**, explorando testes de força bruta utilizando **Medusa** no **Kali Linux**.
+---
 
-> **Aviso Legal:** Todo o conteúdo deste repositório tem fins exclusivamente educacionais e de aprendizado em segurança da informação. Execute testes apenas em ambientes próprios, máquinas virtuais de laboratório ou plataformas autorizadas.
+## Objetivos de Aprendizagem
+- Compreender o funcionamento de ataques de força bruta em diferentes serviços (**FTP**, **Web** e **SMB**).
+- Utilizar o **Kali Linux** e o **Medusa** para auditoria de segurança em ambiente controlado.
+- Documentar processos técnicos e evidências de forma clara e estruturada no GitHub.
+- Reconhecer vulnerabilidades de autenticação e propor medidas de mitigação[cite: 1].
 
-## Contexto do Estudo
-- **Formação:** Bootcamp / Bolsa de Estudos em Cibersegurança — **DIO (Digital Innovation One)**
-- **Ambiente:** Máquina Virtual Kali Linux (ambiente isolado de laboratório)
-- **Ferramenta principal:** Medusa
+## Ferramentas e Ambiente Utilizados
+- **Sistema Operacional:** Kali Linux (Máquina Virtual)[cite: 1, 2]
+- **Reconhecimento de Serviços:** Nmap
+- **Auditoria / Força Bruta:** Medusa[cite: 1, 2]
+- **Alvos de Laboratório:** Serviços FTP, SMB e aplicação web **DVWA (Damn Vulnerable Web Application)**[cite: 1, 2]
 
-## O que foi aprendido na aula
-- Conceitos fundamentais de autenticação e funcionamento de ataques de força bruta (*brute force*) e *credential stuffing*.
-- Estrutura e sintaxe da ferramenta **Medusa** para testes automatizados em múltiplos protocolos.
-- Utilização de *wordlists* de usuários e senhas em ambiente controlado.
-- Estratégias de defesa e mitigação contra tentativas automatizadas de login.
+---
 
-## Exemplos de Comandos (Ambiente de Laboratório)
+## Passo a Passo Técnico (Ambiente de Laboratório)
 
-> Substitua `<IP_DO_ALVO>` pelo endereço da máquina virtual alvo do laboratório.
+> **Nota:** Substitua `<IP_DO_ALVO>` pelo endereço IP da máquina virtual alvo do laboratório.
 
-### Testando um único usuário com wordlist de senhas (SSH)
+### 1. Reconhecimento com Nmap
+Antes de testar credenciais, identificamos quais portas e serviços estão ativos no alvo:
 ```bash
-
-medusa -h <IP_DO_ALVO> -u admin -P /usr/share/wordlists/rockyou.txt -M ssh
-
+nmap -sV <IP_DO_ALVO>
 
 medusa -h <IP_DO_ALVO> -U wordlists/usuarios.txt -P wordlists/senhas.txt -M ftp -t 4 -f
 
-medusa -h <IP_DO_ALVO> -U wordlists/usuarios.txt -P wordlists/senhas.txt -M http -m DIR:/login -t 4 -f
+medusa -h <IP_DO_ALVO> -U wordlists/usuarios.txt -P wordlists/senhas.txt -M smbnt -t 4 -f
 
-Principais flags utilizadas
+medusa -h <IP_DO_ALVO> -U wordlists/usuarios.txt -P wordlists/senhas.txt -M http -m DIR:/dvwa/login.php -t 4 -f
+
+Principais Flags do Medusa
 -h: endereço IP ou host do alvo.
 
--u / -U: usuário único ou arquivo (wordlist) contendo uma lista de usuários.
+-u / -U: usuário único ou arquivo (wordlist) de usuários.
 
--p / -P: senha única ou arquivo (wordlist) contendo uma lista de senhas.
+-p / -P: senha única ou arquivo (wordlist) de senhas.
 
--M: módulo/protocolo do serviço testado (ssh, ftp, http, smbnt, mysql, etc.).
+-M: módulo/protocolo do serviço testado (ftp, smbnt, http, ssh, etc.)[cite: 1].
 
--t: número de threads (conexões simultâneas executadas ao mesmo tempo).
+-t: número de threads (conexões simultâneas).
 
--f: interrompe a execução automaticamente ao encontrar a primeira credencial válida.
-
-
-Como mitigar esse tipo de ataque
-Autenticação Multifator (MFA): adiciona uma camada extra de verificação além da senha.
-
-Políticas de Senhas Fortes: exigir senhas longas, complexas e únicas para cada serviço.
-
-Bloqueio e Rate Limiting: configurar ferramentas como fail2ban para bloquear IPs após várias tentativas falhas consecutivas.
-
-Hardening de Serviços: desativar login direto como root e priorizar autenticação por chaves criptográficas no SSH.
+-f: interrompe a execução ao encontrar a primeira credencial válida.
 
 
-Referências
-Documentação oficial da ferramenta Medusa (man medusa / medusa -d no Kali Linux)
+Medidas de Mitigação e Defesa
+Autenticação Multifator (MFA): impede o acesso mesmo que a senha seja descoberta.
 
-Formação em Cibersegurança — DIO (Digital Innovation One)
+Políticas de Senhas Fortes: exigir senhas longas, complexas e evitar credenciais padrão.
+
+Bloqueio de Tentativas e Rate Limiting: configurar ferramentas como fail2ban ou bloqueio temporário de conta após falhas consecutivas.
+
+Proteção contra Captcha e Tokens CSRF: implementar mecanismos anti-automação em formulários de login web.
+
+Segmentação e Restrição de Acesso: limitar exposição de serviços como FTP e SMB apenas às redes estritamente necessárias.
+
+
+Referências e DocumentaçõesDIO (Digital Innovation One) — Desafio: Criando um Ataque Brute Force de senhas com Medusa e Kali Linux   Kali Linux – Site Oficial   DVWA – Damn Vulnerable Web Application   Medusa – Documentação Oficial
